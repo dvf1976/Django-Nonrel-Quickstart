@@ -111,6 +111,9 @@ download_and_install('appengine', package_to_info_hash)
 for package_name in ['django-nonrel', 'djangoappengine', 'djangotoolbox', 'django-dbindexer']:
     download_and_install(package_name, package_to_info_hash)
 
+if not os.path.exists('%s/.google_appengine' % (primary_directory,)):
+    os.symlink('%s/../google_appengine' % (primary_directory,), '%s/.google_appengine' % (primary_directory,))
+
 # statement = '/bin/cp %s/data/test_appserver.datastore /tmp/dev_appserver.datastore' % (primary_directory,)
 # subprocess.call(statement,shell=True)
 
