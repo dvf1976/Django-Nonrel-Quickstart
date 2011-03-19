@@ -51,29 +51,36 @@ package_to_info_hash = {
         'verification_code'     : '132d50710b1337169981cd78914d36df29aea722',
         'download_filename'     : 'appengine.zip',
         'successfully_installed': '%s/../google_appengine' % (primary_directory,),
+        'symlink_location'      : '%s/.google_appengine' % (primary_directory,)
     },
     'django-nonrel' : {
         'download_url'          : 'https://bitbucket.org/wkornewald/django-nonrel',
         'download_method'       : 'hg',
         'successfully_installed': '%s/django-nonrel' % (shared_directory,),
+        'source_location'       : '%s/django-nonrel/django' % (primary_directory,),
+        'symlink_location'      : '%s/django' % (primary_directory,),
         'shared'                : True,
     },
     'djangoappengine' : {
         'download_url'          : 'https://bitbucket.org/wkornewald/djangoappengine',
         'download_method'       : 'hg',
         'successfully_installed': '%s/djangoappengine' % (shared_directory,),
+        'symlink_location'      : '%s/djangoappengine' % (primary_directory,),
         'shared'                : True,
     },
     'djangotoolbox' : {
         'download_url'          : 'https://bitbucket.org/wkornewald/djangotoolbox',
         'download_method'       : 'hg',
         'successfully_installed': '%s/djangotoolbox' % (shared_directory,),
+        'source_location'       : '%s/djangotoolbox/djangotoolbox' % (primary_directory,),
+        'symlink_location'      : '%s/djangotoolbox' % (primary_directory,),
         'shared'                : True,
     },
     'django-dbindexer' : {
         'download_url'          : 'https://bitbucket.org/wkornewald/django-dbindexer',
         'download_method'       : 'hg',
         'successfully_installed': '%s/django-dbindexer' % (shared_directory,),
+        'symlink_location'      : '%s/django-dbindexer' % (primary_directory,),
         'shared'                : True,
     },
 }
@@ -111,8 +118,13 @@ download_and_install('appengine', package_to_info_hash)
 for package_name in ['django-nonrel', 'djangoappengine', 'djangotoolbox', 'django-dbindexer']:
     download_and_install(package_name, package_to_info_hash)
 
-if not os.path.exists('%s/.google_appengine' % (primary_directory,)):
-    os.symlink('%s/../google_appengine' % (primary_directory,), '%s/.google_appengine' % (primary_directory,))
+for package in package_to_info_hash:
+    if package_to_info_hash[package].has_key('symlink_location'):
+        symlink_location = package_to_info_hash[package]['symlink_location']
+        source_location = package_to_info_hash[package].get('source_location', package_to_info_hash[package]['successfully_installed'])
+        if not os.path.exists(package_to_info_hash[package]['symlink_location']):
+            os.symlink(source_location, symlink_location)
+        print "%s exists!" % (symlink_location,)
 
 # statement = '/bin/cp %s/data/test_appserver.datastore /tmp/dev_appserver.datastore' % (primary_directory,)
 # subprocess.call(statement,shell=True)
