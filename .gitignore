@@ -1,0 +1,9 @@
+*.pyc
+*.swp
+*.swo
+.downloads
+.google_appengine
+django
+django-dbindexer
+djangoappengine
+djangotoolbox
